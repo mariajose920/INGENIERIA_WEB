@@ -5,7 +5,7 @@
     <button @click="mostrar = !mostrar">
       {{ mostrar ? 'Ocultar' : 'Mostrar' }} tareas
     </button>
-    
+
     <ul v-show="mostrar">
       <li v-for="(t, index) in tareas" :key="index">{{ t }}</li>
     </ul>
@@ -26,8 +26,8 @@ export default {
   methods: {
     agregarTarea() {
       if (this.nuevaTarea.trim()) {
-        this.tareas.push(this.nuevaTarea)
-        this.nuevaTarea = ''
+        this.tareas.push(this.nuevaTarea);
+        this.nuevaTarea = '';
       }
     }
   }
