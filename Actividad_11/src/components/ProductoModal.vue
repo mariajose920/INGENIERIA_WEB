@@ -1,154 +1,220 @@
-<!-- Bloque de script con Composition API (script setup) de Vue -->
+<!-- Bloque de código de configuración y lógica en JavaScript usando la sintaxis de Vue 3 -->
 <script setup>
-// Importa las funciones de ciclo de vida onMounted y onBeforeUnmount desde el paquete 'vue'
+// Importa funciones especiales de Vue que detectan cuándo la ventana modal se crea y cuándo se destruye
 import { onMounted, onBeforeUnmount } from 'vue'
 
-// Declara las propiedades (props) aceptadas por el componente
+// Define las propiedades de datos (información) que este componente recibe desde el componente padre
 const props = defineProps({
-  // Propiedad 'producto': objeto con los datos del producto a mostrar; su valor por defecto es null
-  producto: { type: Object, default: null },
-  // Propiedad 'visible': valor booleano obligatorio que indica si el modal se encuentra abierto
-  visible: { type: Boolean, required: true }
-// Cierre de la configuración de props
+  // Configuración de la propiedad 'producto', que almacena toda la información del producto a mostrar
+  producto: {
+    // Indica que el producto debe ser un objeto compuesto por varias propiedades (nombre, precio, etc.)
+    type: Object,
+    // Valor inicial por defecto en caso de no recibir ningún producto (nulo o vacío)
+    default: null
+  // Cierre de la configuración de la propiedad 'producto'
+  },
+  // Configuración de la propiedad 'visible', que indica si la ventana modal debe estar a la vista o no
+  visible: {
+    // Indica que debe ser un valor de tipo booleano (verdadero o falso)
+    type: Boolean,
+    // Especifica que es obligatorio enviar este valor para que el componente funcione
+    required: true
+  // Cierre de la configuración de la propiedad 'visible'
+  }
+// Cierre de la definición de las propiedades del componente
 })
 
-// Define los eventos personalizados que el componente puede emitir hacia el componente padre ('close')
+// Declara los eventos o avisos que este componente puede enviar a su componente padre, como la acción de cerrar
 const emit = defineEmits(['close'])
 
-// Función controladora para gestionar eventos de teclado
+// Función que se encarga de reaccionar cuando el usuario presiona una tecla en su teclado
 function onKeydown(event) {
-  // Si el modal está visible y la tecla pulsada es Escape, emite el evento 'close' para cerrarlo
-  if (props.visible && event.key === 'Escape') emit('close')
-// Cierre del cuerpo de la función onKeydown
+  // Comprueba si la ventana modal está abierta y si la tecla presionada por el usuario fue la tecla 'Escape'
+  if (props.visible && event.key === 'Escape') {
+    // Envía el aviso 'close' hacia afuera para ordenar el cierre de la ventana modal
+    emit('close')
+  // Cierre de la condición if
+  }
+// Cierre de la función onKeydown
 }
 
-// Hook onMounted: se ejecuta al montar el componente en el DOM y registra el evento keydown en el objeto window
-onMounted(() => window.addEventListener('keydown', onKeydown))
-// Hook onBeforeUnmount: se ejecuta antes de desmontar el componente y remueve el listener para evitar fugas de memoria
-onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
-// Cierre del bloque de script
+// Función de ciclo de vida que se ejecuta automáticamente cuando el componente aparece en la pantalla
+onMounted(() => {
+  // Registra un detector en la ventana del navegador para escuchar cada vez que se pulsa una tecla
+  window.addEventListener('keydown', onKeydown)
+// Cierre de la función del hook onMounted
+})
+
+// Función de ciclo de vida que se ejecuta justo antes de que el componente desaparezca de la pantalla
+onBeforeUnmount(() => {
+  // Remueve el detector de teclas para no consumir recursos ni generar errores de memoria
+  window.removeEventListener('keydown', onKeydown)
+// Cierre de la función del hook onBeforeUnmount
+})
+
+// Fin del bloque de código JavaScript del componente
 </script>
 
-<!-- Bloque de plantilla HTML con la estructura visual y enlaces declarativos de Vue -->
+<!-- Bloque de plantilla HTML con la estructura visual y elementos que se verán en pantalla -->
 <template>
-  <!-- Contenedor overlay con fondo oscurecido que se muestra solo si visible es verdadero y producto existe; cierra al hacer click en el fondo -->
+  <!-- Contenedor de fondo oscuro que cubre toda la pantalla; solo se muestra si el modal está visible y hay un producto seleccionado, y al hacer clic en él emite la orden de cerrar -->
   <div v-if="visible && producto" class="overlay" @click.self="emit('close')">
-    <!-- Contenedor principal de la ventana modal con atributos de accesibilidad para diálogos -->
+    <!-- Cuadro o tarjeta principal del diálogo modal con atributos de accesibilidad para lectores de pantalla -->
     <section class="modal" role="dialog" aria-modal="true">
-      <!-- Encabezado de la ventana modal que agrupa la información del producto y el botón de cierre -->
+      <!-- Encabezado superior de la tarjeta modal donde va el título y el botón de cerrar -->
       <header class="modal__header">
-        <!-- Contenedor que agrupa la categoría y el nombre del producto en la cabecera -->
+        <!-- Contenedor divisor que agrupa la categoría y el nombre del producto en la cabecera -->
         <div>
-          <!-- Muestra el texto de la categoría a la que pertenece el producto actual -->
+          <!-- Muestra el texto de la categoría a la que pertenece el producto en formato pequeño -->
           <small>{{ producto.categoria }}</small>
-          <!-- Muestra el nombre principal del producto como encabezado de nivel 2 -->
+          <!-- Muestra el nombre principal del producto en formato grande como encabezado secundario -->
           <h2>{{ producto.nombre }}</h2>
-        <!-- Cierre del contenedor de textos de la cabecera -->
+        <!-- Cierre del contenedor divisor de textos de la cabecera -->
         </div>
-        <!-- Botón que permite cerrar el modal al hacer clic en él, emitiendo el evento 'close' -->
+        <!-- Botón interactivo que al recibir un clic envía la orden para cerrar la ventana modal -->
         <button class="modal__close" @click="emit('close')" aria-label="Cerrar">
-          <!-- Carácter '×' (multiplicación) usado como ícono visual para la acción de cerrar -->
+          <!-- Símbolo o cruz visual para indicar la acción de cerrar la ventana -->
           ×
-        <!-- Cierre de la etiqueta del botón -->
+        <!-- Cierre de la etiqueta del botón de cierre -->
         </button>
-      <!-- Cierre del encabezado de la ventana modal -->
+      <!-- Cierre del encabezado superior del modal -->
       </header>
-      <!-- Imagen ilustrativa del producto con enlace dinámico a la URL y texto alternativo accesible -->
+      <!-- Fotografía del producto con su dirección enlazada dinámicamente y nombre accesible -->
       <img class="modal__img" :src="producto.imagen" :alt="producto.nombre" />
-      <!-- Contenedor del contenido principal con la descripción y el precio del producto -->
+      <!-- Contenedor inferior para la descripción detallada y el precio del producto -->
       <div class="modal__content">
-        <!-- Párrafo que renderiza el texto de la descripción detallada del producto -->
+        <!-- Párrafo que muestra la descripción detallada de las características del producto -->
         <p>{{ producto.descripcion }}</p>
-        <!-- Párrafo con estilo destacado para mostrar el precio del producto -->
+        <!-- Párrafo con estilo resaltado para mostrar el valor monetario del producto -->
         <p class="modal__price">
-          <!-- Muestra el precio formateado numéricamente según la convención local de Chile (es-CL) -->
+          <!-- Muestra el precio formateado con puntos de miles según las costumbres de Chile -->
           Precio: ${{ Number(producto.precio).toLocaleString('es-CL') }}
-        <!-- Cierre del párrafo de precio -->
+        <!-- Cierre del párrafo que muestra el precio -->
         </p>
-      <!-- Cierre del contenedor del contenido -->
+      <!-- Cierre del contenedor de descripción y precio -->
       </div>
-    <!-- Cierre de la sección modal -->
+    <!-- Cierre del cuadro o tarjeta principal del modal -->
     </section>
-  <!-- Cierre del div overlay -->
+  <!-- Cierre del contenedor de fondo oscuro overlay -->
   </div>
-<!-- Fin de la sección de plantilla -->
+<!-- Fin del bloque de plantilla visual -->
 </template>
 
-<!-- Bloque de estilos CSS encapsulados (scoped) para el componente -->
+<!-- Bloque de estilos CSS que definen los colores, tamaños y posiciones del componente -->
 <style scoped>
-/* Regla de estilos para la capa de superposición oscura (overlay) */
+/* Regla de estilos para el fondo oscurecido que cubre toda la pantalla (.overlay) */
 .overlay {
-  /* Posicionamiento fijo respecto a la ventana gráfica del navegador */
+  /* Fija la posición del fondo en relación con la pantalla completa para que no se mueva al desplazarse */
   position: fixed;
-  /* Ocupa los cuatro lados de la pantalla: superior, derecho, inferior e izquierdo a 0 */
+  /* Extiende el fondo hasta los cuatro bordes de la pantalla (arriba, derecha, abajo e izquierda en 0) */
   inset: 0;
-  /* Nivel de capa z en 100 para situarse por encima del contenido inferior */
+  /* Coloca este elemento en la capa 100 para situarse por encima del resto del contenido de la página */
   z-index: 100;
-  /* Define un contenedor con formato CSS Grid */
+  /* Activa el diseño de cuadrícula (Grid) para facilitar la alineación de sus elementos */
   display: grid;
-  /* Centra perfectamente el contenido (modal) tanto horizontal como verticalmente */
+  /* Centra perfectamente la tarjeta del modal tanto en el eje vertical como en el horizontal */
   place-items: center;
-  /* Relleno interno perimetral de 20px para evitar desbordes contra bordes de pantalla */
+  /* Añade un relleno interno de 20 píxeles para que la tarjeta no toque los bordes de la pantalla */
   padding: 20px;
-  /* Fondo oscuro semitransparente con formato RGBA al 65% de opacidad */
+  /* Aplica un color de fondo azul oscuro semitransparente con un 65% de opacidad */
   background: rgba(15, 23, 42, .65);
-/* Cierre de la clase .overlay */
+/* Cierre de los estilos del fondo oscurecido */
 }
-/* Regla de estilos para la tarjeta de la ventana modal */
+
+/* Regla de estilos para la tarjeta o cuadro blanco del modal (.modal) */
 .modal {
-  /* Ancho dinámico que toma el valor mínimo entre 680px y el 100% disponible */
+  /* Ancho dinámico que toma como máximo 680 píxeles o el 100% disponible en pantallas pequeñas */
   width: min(680px, 100%);
-  /* Oculta el contenido hijo que exceda los bordes redondeados */
+  /* Oculta cualquier contenido hijo que sobrepase las esquinas redondeadas */
   overflow: hidden;
-  /* Aplica un redondeo de esquinas con radio de 18px */
+  /* Redondea las cuatro esquinas de la tarjeta con un radio de 18 píxeles */
   border-radius: 18px;
-  /* Color de fondo blanco puro para el contenedor modal */
+  /* Asigna un color de fondo blanco limpio y brillante a la tarjeta */
   background: white;
-  /* Sombra difuminada para otorgar profundidad y elevación visual */
+  /* Aplica una sombra suave y profunda debajo de la tarjeta para crear un efecto de relieve */
   box-shadow: 0 25px 80px rgba(0, 0, 0, .3);
-/* Cierre de la clase .modal */
+/* Cierre de los estilos de la tarjeta modal */
 }
-/* Regla de estilos para la barra superior o cabecera del modal */
+
+/* Regla de estilos para la barra superior o cabecera del modal (.modal__header) */
 .modal__header {
-  /* Distribuye los elementos interiores usando el modelo Flexbox */
+  /* Coloca los elementos internos en fila horizontal usando el modelo de caja flexible (Flexbox) */
   display: flex;
-  /* Separa el bloque de títulos y el botón de cierre a extremos opuestos */
+  /* Empuja el bloque de títulos a la izquierda y el botón de cerrar a la derecha separándolos al máximo */
   justify-content: space-between;
-  /* Establece un espacio de separación de 16px entre columnas flexibles */
+  /* Añade un espacio de separación de 16 píxeles entre los elementos de la fila */
   gap: 16px;
-  /* Alinea los elementos al tope superior del contenedor */
+  /* Alinea los elementos al inicio superior del contenedor */
   align-items: flex-start;
-  /* Aplica un padding interno de 18px en todos los lados */
+  /* Añade un relleno interno de 18 píxeles en todos los lados del encabezado */
   padding: 18px;
-  /* Agrega una línea divisoria inferior de 1px con color gris claro */
+  /* Dibuja una línea divisoria inferior de 1 píxel gris claro para separarlo del resto de la tarjeta */
   border-bottom: 1px solid #e5e7eb;
-/* Cierre de la clase .modal__header */
+/* Cierre de los estilos de la cabecera */
 }
-/* Elimina el margen superior excesivo del encabezado de título h2 */
-.modal__header h2 { margin: 2px 0 0; }
-/* Aplica un tono gris azulado suave al texto de la categoría */
-.modal__header small { color: #64748b; }
-/* Regla de estilos para el botón de cerrar el modal */
+
+/* Regla de estilos para el título h2 dentro de la cabecera */
+.modal__header h2 {
+  /* Ajusta el margen superior a 2 píxeles y elimina los márgenes laterales e inferior */
+  margin: 2px 0 0;
+/* Cierre de los estilos del título h2 */
+}
+
+/* Regla de estilos para el texto de categoría (small) dentro de la cabecera */
+.modal__header small {
+  /* Aplica un color gris azulado suave para que la categoría se lea como información secundaria */
+  color: #64748b;
+/* Cierre de los estilos del texto de categoría */
+}
+
+/* Regla de estilos para el botón de cerrar (.modal__close) */
 .modal__close {
-  /* Remueve el borde por defecto del elemento botón */
+  /* Quita el borde predeterminado del botón */
   border: 0;
-  /* Establece un fondo completamente transparente */
+  /* Establece un fondo totalmente transparente */
   background: transparent;
-  /* Aplica un tamaño de fuente de 2rem para agrandar la cruz de cierre */
+  /* Aumenta el tamaño del icono de cruz a 2rem para facilitar el clic táctil o con ratón */
   font-size: 2rem;
-  /* Altura de línea unitaria para evitar espacio vertical innecesario */
+  /* Ajusta la altura de línea a 1 para evitar espacios verticales vacíos */
   line-height: 1;
-  /* Color gris para el icono de la cruz */
+  /* Define un color gris oscuro para el icono de la cruz */
   color: #475569;
-/* Cierre de la clase .modal__close */
+/* Cierre de los estilos del botón de cerrar */
 }
-/* Estilos para la imagen del producto dentro del modal: ancho completo, altura fija de 300px y recorte proporcional */
-.modal__img { width: 100%; height: 300px; object-fit: cover; }
-/* Espaciado interno de 18px para el bloque de contenido descriptivo */
-.modal__content { padding: 18px; }
-/* Altura de línea de 1.55 para favorecer la lectura del párrafo descriptivo */
-.modal__content p { line-height: 1.55; }
-/* Estilos para el texto de precio: tamaño de 1.05rem y peso tipográfico negrita de 800 */
-.modal__price { font-size: 1.05rem; font-weight: 800; }
-/* Cierre del bloque de estilos */
+
+/* Regla de estilos para la fotografía del producto (.modal__img) */
+.modal__img {
+  /* Hace que la imagen ocupe todo el ancho disponible del modal (100%) */
+  width: 100%;
+  /* Fija la altura de la imagen exactamente en 300 píxeles */
+  height: 300px;
+  /* Recorta y acomoda la imagen proporcionalmente para que no se deforme ni pierda relación de aspecto */
+  object-fit: cover;
+/* Cierre de los estilos de la fotografía */
+}
+
+/* Regla de estilos para el contenedor del contenido descriptivo y precio (.modal__content) */
+.modal__content {
+  /* Agrega un relleno interno de 18 píxeles en todos los lados para que los textos tengan aire y margen */
+  padding: 18px;
+/* Cierre de los estilos del contenedor de contenido */
+}
+
+/* Regla de estilos para los párrafos dentro de la sección de contenido */
+.modal__content p {
+  /* Ajusta el interlineado a 1.55 veces para una lectura cómoda del párrafo */
+  line-height: 1.55;
+/* Cierre de los estilos de los párrafos */
+}
+
+/* Regla de estilos para el párrafo que muestra el precio (.modal__price) */
+.modal__price {
+  /* Aumenta el tamaño del texto a 1.05rem para destacar el precio */
+  font-size: 1.05rem;
+  /* Aplica un peso tipográfico muy grueso (negrita 800) para darle protagonismo */
+  font-weight: 800;
+/* Cierre de los estilos del precio */
+}
+
+/* Fin de los estilos del componente */
 </style>

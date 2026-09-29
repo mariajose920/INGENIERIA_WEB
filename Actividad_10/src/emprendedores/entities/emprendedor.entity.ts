@@ -1,38 +1,38 @@
-// Importa los decoradores Column, Entity y PrimaryGeneratedColumn desde TypeORM para estructurar la entidad ORM
+// Importa herramientas de la librería TypeORM (Column, Entity, PrimaryGeneratedColumn) para estructurar y conectar los datos con la base de datos
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
-// Decorador que indica a TypeORM que esta clase representa una tabla en la base de datos
+// Indica al sistema que esta clase representa una tabla completa donde se guardarán los emprendedores en la base de datos
 @Entity()
-// Exporta la clase Emprendedor para permitir su uso e inyección en otros módulos de la aplicación
+// Crea y comparte la plantilla o modelo "Emprendedor" para que pueda ser utilizado en cualquier parte del sistema
 export class Emprendedor {
-  // Decorador que define la columna como clave primaria con valor numérico autoincremental
+  // Configura este campo como la clave principal e indica que se numerará automáticamente (1, 2, 3...) con cada nuevo registro
   @PrimaryGeneratedColumn()
-  // Identificador único del emprendedor dentro de la base de datos
+  // Almacena el número identificador único asignado a cada emprendedor
   id: number
 
-  // Decorador que mapea esta propiedad a una columna de tipo texto estándar en la base de datos
+  // Indica que este dato se guardará como una columna estándar de texto en la tabla de la base de datos
   @Column()
-  // Nombre del emprendedor
+  // Almacena el nombre del emprendedor en formato de texto
   nombre: string
 
-  // Decorador que mapea esta propiedad a una columna de tipo texto estándar en la base de datos
+  // Indica que este dato se guardará como una columna estándar de texto en la tabla de la base de datos
   @Column()
-  // Comuna o ubicación geográfica asociada al emprendedor
+  // Almacena la comuna o ciudad donde opera el emprendedor
   comuna: string
 
-  // Decorador que mapea esta propiedad a una columna de tipo texto estándar en la base de datos
+  // Indica que este dato se guardará como una columna estándar de texto en la tabla de la base de datos
   @Column()
-  // Rubro o sector comercial al que pertenece el emprendedor
+  // Almacena el rubro o área comercial a la que se dedica el emprendedor (por ejemplo: Turismo, Artesanía)
   rubro: string
 
-  // Decorador que define una columna de tipo texto extenso ('text') en la base de datos
+  // Configura la columna para admitir un texto extenso y detallado sin límite corto de caracteres
   @Column({ type: 'text' })
-  // Descripción detallada sobre el emprendimiento o actividad
+  // Almacena una descripción completa y detallada sobre la actividad del emprendimiento
   descripcion: string
 
-  // Decorador que mapea esta propiedad a una columna de tipo texto estándar en la base de datos
+  // Indica que este dato se guardará como una columna estándar de texto en la tabla de la base de datos
   @Column()
-  // Información de contacto del emprendedor (teléfono, correo, etc.)
+  // Almacena los datos de contacto del emprendedor (como teléfono o correo electrónico)
   contacto: string
-// Cierre de la definición de la clase Emprendedor
+// Llave que marca el final de la definición de la plantilla Emprendedor
 }

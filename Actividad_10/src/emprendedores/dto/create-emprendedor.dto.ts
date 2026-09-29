@@ -1,48 +1,48 @@
-// Importa el decorador ApiProperty desde @nestjs/swagger para exponer y documentar propiedades en OpenAPI/Swagger
+// Trae la herramienta ApiProperty para documentar y mostrar este campo en el catálogo web interactivo de la API
 import { ApiProperty } from '@nestjs/swagger'
-// Importa los decoradores de validación de class-validator para asegurar la integridad de los datos recibidos
+// Trae reglas de validación para verificar automáticamente que los datos recibidos sean válidos (texto, no vacío, tamaño mínimo)
 import { IsIn, IsNotEmpty, IsString, MinLength } from 'class-validator'
 
-// Define una lista inmutable (tupla de solo lectura) con los nombres de los rubros válidos para los emprendedores
+// Lista con las categorías o rubros comerciales autorizados para registrar a un emprendedor
 export const RUBROS = ['Apicultura','Lácteos','Textiles','Turismo','Artesanía','Agricultura'] as const
-// Define un tipo TypeScript basado en los elementos del arreglo RUBROS para restringir el valor a uno de ellos
+// Crea una regla de tipo que obliga a que el rubro coincida exactamente con alguna de las opciones de la lista anterior
 export type Rubro = typeof RUBROS[number]
 
-// Declara y exporta la clase CreateEmprendedorDto utilizada como Data Transfer Object (DTO) para la creación de emprendedores
+// Define la estructura o formulario de datos requeridos para poder registrar a un nuevo emprendedor
 export class CreateEmprendedorDto {
-  // Documenta el campo 'nombre' en Swagger indicando que forma parte del esquema del DTO
+  // Configura este campo en la documentación interactiva para que se muestre en el catálogo de la API
   @ApiProperty()
-  // Valida que el valor sea una cadena de texto y que su longitud sea de al menos 3 caracteres
+  // Comprueba que el dato recibido sea texto y que contenga como mínimo 3 caracteres
   @IsString() @MinLength(3)
-  // Declara la propiedad 'nombre' de tipo string que almacena el nombre del emprendedor
+  // Guarda el nombre del emprendedor o de su negocio como texto
   nombre: string
 
-  // Documenta el campo 'comuna' en Swagger incluyendo un valor de ejemplo ('Chillán')
+  // Agrega este campo a la documentación interactiva mostrando 'Chillán' como ejemplo sugerido
   @ApiProperty({ example: 'Chillán' })
-  // Valida que el valor sea una cadena de texto y que no esté vacía ni contenga solo espacios
+  // Comprueba que el dato recibido sea texto y que no esté vacío
   @IsString() @IsNotEmpty()
-  // Declara la propiedad 'comuna' de tipo string que almacena la comuna donde opera el emprendedor
+  // Guarda la comuna o ciudad de residencia del emprendedor como texto
   comuna: string
 
-  // Documenta el campo 'rubro' en Swagger indicando que su valor debe pertenecer a la lista RUBROS
+  // Muestra en la documentación interactiva el menú de opciones permitidas basado en la lista de rubros
   @ApiProperty({ enum: RUBROS })
-  // Valida que el valor ingresado esté estrictamente contenido en el arreglo RUBROS
+  // Comprueba estrictamente que la opción enviada pertenezca a la lista autorizada de rubros
   @IsIn(RUBROS as unknown as string[])
-  // Declara la propiedad 'rubro' con el tipo específico Rubro para garantizar consistencia tipada
+  // Guarda el rubro o sector productivo seleccionado por el emprendedor
   rubro: Rubro
 
-  // Documenta el campo 'descripcion' en Swagger para la especificación de la API
+  // Configura este campo en la documentación interactiva para que se muestre en el catálogo de la API
   @ApiProperty()
-  // Valida que el valor sea una cadena de texto y que tenga una longitud mínima de 10 caracteres
+  // Comprueba que el dato recibido sea texto y que tenga una longitud mínima de 10 caracteres
   @IsString() @MinLength(10)
-  // Declara la propiedad 'descripcion' de tipo string para detallar la actividad comercial del emprendedor
+  // Guarda la descripción detallada sobre lo que hace el emprendimiento
   descripcion: string
 
-  // Documenta el campo 'contacto' en Swagger proporcionando un ejemplo del formato esperado (correo o teléfono)
+  // Agrega este campo a la documentación interactiva mostrando un ejemplo de correo o teléfono
   @ApiProperty({ example: 'correo@dominio.cl o +56 9 1234 5678' })
-  // Valida que el valor sea una cadena de texto y que no esté vacío
+  // Comprueba que el dato recibido sea texto y que no esté en blanco
   @IsString() @IsNotEmpty()
-  // Declara la propiedad 'contacto' de tipo string para almacenar la información de contacto del emprendedor
+  // Guarda la información de contacto (correo electrónico o teléfono) como texto
   contacto: string
-// Cierre del cuerpo de la clase CreateEmprendedorDto
+// Cierre del bloque que define el formulario de creación del emprendedor
 }

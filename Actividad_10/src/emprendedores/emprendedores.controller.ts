@@ -1,68 +1,75 @@
-// Importa decoradores y utilidades HTTP desde el paquete '@nestjs/common'
+// Importa herramientas del marco de trabajo NestJS para procesar peticiones web (manejo de rutas, verbos HTTP y recepción de parámetros)
 import { Controller, Get, Post, Body, Param, Delete, Put, Query } from '@nestjs/common'
-// Importa el decorador ApiTags para la documentación OpenAPI / Swagger
+// Importa la utilidad ApiTags para agrupar y rotular las operaciones en la documentación interactiva de Swagger
 import { ApiTags } from '@nestjs/swagger'
-// Importa el DTO con la estructura para crear un nuevo emprendedor
+// Importa la plantilla de validación que define los campos obligatorios al crear un nuevo emprendedor
 import { CreateEmprendedorDto } from './dto/create-emprendedor.dto'
-// Importa el DTO con la estructura para actualizar un emprendedor existente
+// Importa la plantilla de validación con los campos editables para actualizar un emprendedor
 import { UpdateEmprendedorDto } from './dto/update-emprendedor.dto'
-// Importa el servicio EmprendedoresService que gestiona la lógica de negocio
+// Importa el servicio que contiene las reglas de negocio y las consultas directas a la base de datos
 import { EmprendedoresService } from './emprendedores.service'
 
-// Agrupa las rutas de este controlador bajo la etiqueta 'emprendedores' en Swagger
+// Asigna la categoría 'emprendedores' para clasificar este grupo de rutas en la interfaz visual de Swagger
 @ApiTags('emprendedores')
-// Define el prefijo de ruta base '/emprendedores' para todas las rutas del controlador
+// Define que todas las direcciones web gestionadas por este controlador comenzarán con el prefijo '/emprendedores'
 @Controller('emprendedores')
-// Declara y exporta la clase controladora de emprendedores
+// Declara y exporta la clase controladora encargada de atender las peticiones de los usuarios sobre emprendedores
 export class EmprendedoresController {
-  // Inyecta la dependencia del servicio EmprendedoresService en el constructor
+  // Constructor que recibe e inicializa de manera automática el servicio de emprendedores para usar sus funciones internas
   constructor(private readonly service: EmprendedoresService) {}
 
-  // Decorador para definir el endpoint HTTP GET en la ruta raíz '/'
+  // Indica que la siguiente función responderá a consultas de lectura (GET) en la dirección principal '/emprendedores'
   @Get()
-  // Método del controlador para obtener la lista de todos los emprendedores
+  // Función encargada de solicitar y retornar el listado completo de todos los emprendedores registrados
   findAll() {
-    // Retorna el resultado de invocar el método findAll() del servicio
+    // Pide al servicio que busque todos los emprendedores y devuelve la lista obtenida
     return this.service.findAll()
-  } // Fin del método findAll
+  // Cierre de la función findAll
+  }
 
-  // Decorador para definir el endpoint HTTP GET en la subruta '/buscar'
+  // Indica que la siguiente función responderá a consultas GET en la subdirección '/emprendedores/buscar'
   @Get('buscar')
-  // Método que recibe los parámetros opcionales de consulta 'comuna' y 'rubro' mediante decoradores @Query
+  // Función que recibe filtros opcionales de búsqueda escritos en la dirección web (comuna o rubro)
   buscar(@Query('comuna') comuna?: string, @Query('rubro') rubro?: string) {
-    // Retorna el resultado de ejecutar la búsqueda en el servicio con los filtros proporcionados
+    // Solicita al servicio buscar los emprendedores que coincidan con los filtros indicados y retorna los resultados
     return this.service.buscar(comuna, rubro)
-  } // Fin del método buscar
+  // Cierre de la función buscar
+  }
 
-  // Decorador para definir el endpoint HTTP GET con parámetro de ruta ':id'
+  // Indica que la siguiente función responderá a consultas GET que incluyan el número identificador (:id) en la dirección web
   @Get(':id')
-  // Método que recibe el identificador 'id' desde los parámetros de la URL mediante @Param
+  // Función que captura el parámetro 'id' correspondiente al emprendedor que se desea consultar
   findOne(@Param('id') id: string) {
-    // Convierte el id a tipo numérico y retorna el resultado de consultar dicho emprendedor en el servicio
+    // Convierte el identificador a formato numérico y retorna los datos del emprendedor encontrados por el servicio
     return this.service.findOne(Number(id))
-  } // Fin del método findOne
+  // Cierre de la función findOne
+  }
 
-  // Decorador para definir el endpoint HTTP POST en la ruta raíz '/'
+  // Indica que la siguiente función responderá a solicitudes de creación de datos (POST) en la ruta '/emprendedores'
   @Post()
-  // Método que recibe los datos validados del cuerpo de la petición mediante @Body con CreateEmprendedorDto
+  // Función que recibe y valida los datos enviados para dar de alta a un nuevo emprendedor
   create(@Body() dto: CreateEmprendedorDto) {
-    // Retorna el resultado de solicitar al servicio la creación del nuevo emprendedor con los datos del DTO
+    // Solicita al servicio guardar el nuevo emprendedor en la base de datos y retorna el registro creado
     return this.service.create(dto)
-  } // Fin del método create
+  // Cierre de la función create
+  }
 
-  // Decorador para definir el endpoint HTTP PUT con parámetro de ruta ':id' para actualizaciones
+  // Indica que la siguiente función responderá a solicitudes de modificación (PUT) indicando el identificador (:id) del registro
   @Put(':id')
-  // Método que recibe el parámetro 'id' de la ruta y los datos a actualizar en el cuerpo de la petición
+  // Función que recibe el identificador del emprendedor y los nuevos datos para actualizar su información
   update(@Param('id') id: string, @Body() dto: UpdateEmprendedorDto) {
-    // Convierte el id a número y retorna el resultado de actualizar el registro en el servicio
+    // Convierte el identificador a número, solicita al servicio actualizar el registro y retorna el resultado modificado
     return this.service.update(Number(id), dto)
-  } // Fin del método update
+  // Cierre de la función update
+  }
 
-  // Decorador para definir el endpoint HTTP DELETE con parámetro de ruta ':id' para eliminaciones
+  // Indica que la siguiente función responderá a solicitudes de eliminación (DELETE) indicando el identificador (:id)
   @Delete(':id')
-  // Método que recibe el parámetro de ruta 'id' del emprendedor a eliminar
+  // Función que recibe el identificador del emprendedor que se desea remover del sistema
   remove(@Param('id') id: string) {
-    // Convierte el id a número y retorna el resultado de eliminar el registro en el servicio
+    // Convierte el identificador a número, solicita al servicio borrar el registro y retorna la confirmación de la operación
     return this.service.remove(Number(id))
-  } // Fin del método remove
-} // Fin de la clase EmprendedoresController
+  // Cierre de la función remove
+  }
+// Cierre del cuerpo de la clase EmprendedoresController
+}

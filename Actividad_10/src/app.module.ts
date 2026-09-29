@@ -1,35 +1,35 @@
-// Carga las variables de entorno desde el archivo .env hacia el objeto global process.env
+// Lee y carga el archivo de configuración (.env) donde se guardan contraseñas y ajustes ocultos del sistema
 import 'dotenv/config';
-// Importa el decorador Module desde el paquete @nestjs/common para definir un módulo de NestJS
+// Trae la función 'Module' de NestJS, que sirve para crear cajas organizadoras (módulos) en la aplicación
 import { Module } from '@nestjs/common';
-// Importa TypeOrmModule desde @nestjs/typeorm para integrar el ORM TypeORM con NestJS
+// Trae la herramienta de TypeORM que permite conectar y comunicarse con la base de datos fácilmente
 import { TypeOrmModule } from '@nestjs/typeorm';
-// Importa la entidad Emprendedor que modela la tabla de emprendedores en la base de datos
+// Trae la estructura o molde 'Emprendedor' que define qué datos (nombre, correo, etc.) tendrá cada emprendedor
 import { Emprendedor } from './emprendedores/entities/emprendedor.entity';
-// Importa el módulo EmprendedoresModule que encapsula los controladores y servicios de emprendedores
+// Trae el módulo de Emprendedores que agrupa todas las funciones y operaciones para gestionar emprendedores
 import { EmprendedoresModule } from './emprendedores/emprendedores.module';
 
-// Aplica el decorador @Module para configurar los metadatos y dependencias del módulo raíz
+// Marca esta clase como el módulo principal o caja central que une todas las piezas de la aplicación
 @Module({
-  // Define el arreglo de módulos que se importan para poner sus componentes a disposición de este módulo
+  // Lista de otros módulos o herramientas que este módulo necesita para funcionar
   imports: [
-    // Configura e inicializa la conexión principal y global de TypeORM para la base de datos
+    // Inicializa y prepara la conexión principal con la base de datos
     TypeOrmModule.forRoot({
-      // Establece el motor de base de datos a utilizar, en este caso SQLite mediante el driver better-sqlite3
+      // Indica qué tipo de base de datos se usará; en este caso SQLite (una base de datos ligera guardada en un archivo)
       type: 'better-sqlite3',
-      // Define el nombre y la ruta del archivo local de la base de datos SQLite donde se persistirá la información
+      // Especifica el nombre del archivo en la computadora donde se guardarán todos los datos registrados ('data.db')
       database: 'data.db',
-      // Registra las entidades que formarán parte de la base de datos para que TypeORM las administre
+      // Registra qué tablas o moldes de información se deben crear y gestionar en la base de datos (aquí Emprendedor)
       entities: [Emprendedor],
-      // Sincroniza automáticamente el esquema de las tablas con las entidades (solo para desarrollo, no para producción)
-      synchronize: true // SOLO en desarrollo (no en producción)
-    // Cierra el objeto de opciones de configuración de la conexión de TypeORM
+      // Hace que la base de datos se adapte automáticamente al código cada vez que inicia (solo útil mientras se programa)
+      synchronize: true, // Se activa solo en desarrollo para actualizar cambios rápido; en producción se desactiva por seguridad
+    // Cierra las opciones de configuración de la conexión con la base de datos
     }),
-    // Agrega el módulo de Emprendedores a la lista de módulos importados para habilitar sus rutas y servicios
+    // Conecta el módulo de Emprendedores al sistema principal para que sus funciones y URLs estén disponibles
     EmprendedoresModule
-  // Cierra el arreglo de módulos importados en la configuración
+  // Cierra la lista de módulos importados
   ],
-// Cierra el objeto de configuración proporcionado al decorador @Module
+// Cierra la configuración del módulo principal
 })
-// Declara y exporta la clase AppModule que representa el módulo principal de la aplicación NestJS
+// Declara y comparte hacia afuera la clase AppModule, que representa el corazón de toda la aplicación
 export class AppModule {}

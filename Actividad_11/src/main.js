@@ -1,10 +1,11 @@
-// Importa la función 'createApp' desde la librería Vue para inicializar la aplicación
-import { createApp } from 'vue' // Extrae el método createApp del módulo 'vue'
-// Importa el componente raíz de la aplicación desde el archivo App.vue
-import App from './App.vue' // Carga la estructura y lógica del componente principal App
-// Importa los estilos globales definidos en el archivo style.css
-import './style.css' // Aplica los estilos globales a toda la aplicación
+// Importa la función 'createApp' desde la librería Vue para iniciar y configurar la aplicación web
+import { createApp } from 'vue'
 
-// Crea la instancia de la aplicación con el componente raíz y la monta en el elemento del DOM con el ID 'app'
-createApp(App).mount('#app') // Inicializa la app y la renderiza dentro de <div id="app"></div>
+// Importa el componente principal 'App' que contiene toda la vista y lógica central del sitio
+import App from './App.vue'
 
+// Importa la hoja de estilos CSS general para dar diseño, colores y tipografía a la aplicación
+import './style.css'
+
+// Crea la aplicación web con el componente principal y la coloca dentro del contenedor HTML que tiene el id "app"
+createApp(App).mount('#app')

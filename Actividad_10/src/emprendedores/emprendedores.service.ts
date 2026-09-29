@@ -1,95 +1,95 @@
-// Importa utilidades, decoradores y excepciones HTTP necesarias desde el módulo común de NestJS
+// Importa herramientas de NestJS: Injectable para servicios y clases de error para responder cuando algo falla
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common'
-// Importa el decorador InjectRepository para inyectar el repositorio de TypeORM en el servicio
+// Importa el decorador para conectar y solicitar la tabla de datos en el servicio
 import { InjectRepository } from '@nestjs/typeorm'
-// Importa la clase Repository de TypeORM que proporciona métodos para interactuar con la base de datos
+// Importa el manejador de la base de datos (Repository) que permite buscar, guardar y borrar registros
 import { Repository } from 'typeorm'
-// Importa el DTO con la estructura y validaciones necesarias para crear un emprendedor
+// Importa la plantilla de datos que define los campos obligatorios para registrar un nuevo emprendedor
 import { CreateEmprendedorDto } from './dto/create-emprendedor.dto'
-// Importa el DTO con los campos permitidos para actualizar un emprendedor existente
+// Importa la plantilla de datos que define qué información se puede modificar en un emprendedor existente
 import { UpdateEmprendedorDto } from './dto/update-emprendedor.dto'
-// Importa la entidad Emprendedor que representa el modelo y la tabla de emprendedores en la base de datos
+// Importa el modelo de datos de Emprendedor que representa la tabla en la base de datos
 import { Emprendedor } from './entities/emprendedor.entity'
 
-// Decorador que registra esta clase como un proveedor inyectable en el contenedor de dependencias de NestJS
+// Indica al sistema que esta clase es un servicio reutilizable que puede ser inyectado donde se necesite
 @Injectable()
-// Declara y exporta la clase EmprendedoresService que gestiona la lógica de negocio de los emprendedores
+// Declara y exporta la clase del servicio que contiene la lógica para gestionar a los emprendedores
 export class EmprendedoresService {
-  // Define el constructor de la clase para recibir las dependencias requeridas
+  // Constructor que recibe las herramientas necesarias cuando se inicializa la clase
   constructor(
-    // Decorador que especifica la inyección del repositorio correspondiente a la entidad Emprendedor
+    // Indica que se debe conectar específicamente con la tabla de datos de Emprendedor
     @InjectRepository(Emprendedor)
-    // Declara una propiedad privada repo de tipo Repository<Emprendedor> para operar con la base de datos
+    // Declara una propiedad privada 'repo' para realizar operaciones de base de datos sobre los emprendedores
     private repo: Repository<Emprendedor>,
   // Cierre de los parámetros del constructor
   ) {}
 
-  // Declara el método para consultar y obtener todos los emprendedores registrados
+  // Declara la función para consultar y obtener la lista de todos los emprendedores registrados
   findAll() {
-    // Ejecuta la consulta find() del repositorio para obtener y retornar todos los emprendedores de la base de datos
+    // Consulta a la base de datos y entrega la lista completa de todos los emprendedores
     return this.repo.find()
-  // Cierre del método findAll
+  // Cierre de la función findAll
   }
 
-  // Declara el método asíncrono para buscar un emprendedor específico a través de su ID
+  // Declara la función asíncrona para buscar a un único emprendedor a través de su número de identificación (ID)
   async findOne(id: number) {
-    // Consulta en el repositorio de manera asíncrona el primer registro que coincida con el ID proporcionado
+    // Busca en la base de datos el primer emprendedor cuyo ID coincida con el solicitado
     const found = await this.repo.findOne({ where: { id } })
-    // Comprueba si no se encontró ningún emprendedor con dicho ID y lanza una excepción NotFoundException (404)
+    // Si no se encontró ningún emprendedor con ese ID, detiene la ejecución y devuelve un error indicando que no existe
     if (!found) throw new NotFoundException({ error: 'Emprendedor no encontrado' })
-    // Retorna la entidad del emprendedor encontrada en caso de existir
+    // Retorna la información del emprendedor encontrado
     return found
-  // Cierre del método findOne
+  // Cierre de la función findOne
   }
 
-  // Declara el método para crear y registrar un nuevo emprendedor a partir del DTO recibido
+  // Declara la función para registrar un nuevo emprendedor con los datos recibidos del formulario
   create(dto: CreateEmprendedorDto) {
-    // Crea una nueva instancia de la entidad Emprendedor mapeando las propiedades recibidas en el DTO
+    // Prepara una nueva instancia de emprendedor combinando los datos recibidos con la estructura de la base de datos
     const ent = this.repo.create(dto)
-    // Guarda y persiste la nueva entidad en la base de datos mediante el repositorio y retorna el registro guardado
+    // Guarda de manera permanente el nuevo emprendedor en la base de datos y lo devuelve
     return this.repo.save(ent)
-  // Cierre del método create
+  // Cierre de la función create
   }
 
-  // Declara el método asíncrono para actualizar los datos de un emprendedor existente identificado por su ID
+  // Declara la función asíncrona para modificar los datos de un emprendedor existente según su ID
   async update(id: number, dto: UpdateEmprendedorDto) {
-    // Obtiene el registro actual llamando a findOne, asegurando que el emprendedor exista o lanzando error si no
+    // Busca primero al emprendedor para verificar que existe en la base de datos antes de editarlo
     const prev = await this.findOne(id)
-    // Copia y sobrescribe los nuevos campos provenientes del DTO sobre la entidad existente
+    // Copia y reemplaza los datos existentes del emprendedor con la nueva información recibida
     Object.assign(prev, dto)
-    // Guarda los cambios aplicados en la base de datos a través del repositorio y retorna la entidad actualizada
+    // Guarda los cambios realizados en la base de datos y retorna el emprendedor actualizado
     return this.repo.save(prev)
-  // Cierre del método update
+  // Cierre de la función update
   }
 
-  // Declara el método asíncrono para eliminar un registro de emprendedor de la base de datos por su ID
+  // Declara la función asíncrona para eliminar un emprendedor de la base de datos usando su ID
   async remove(id: number) {
-    // Busca el emprendedor mediante findOne para validar su existencia previa antes de proceder al borrado
+    // Busca al emprendedor para confirmar su existencia antes de proceder a borrarlo
     const prev = await this.findOne(id)
-    // Elimina de forma asíncrona la entidad encontrada de la base de datos utilizando el repositorio
+    // Elimina de forma definitiva al emprendedor de la base de datos
     await this.repo.remove(prev)
-    // Retorna un objeto con la propiedad ok en true para confirmar que la eliminación fue satisfactoria
+    // Retorna una confirmación indicando que la eliminación fue exitosa con ok en true
     return { ok: true }
-  // Cierre del método remove
+  // Cierre de la función remove
   }
 
-  // Declara el método asíncrono para realizar búsquedas filtradas de emprendedores por comuna y/o rubro
+  // Declara la función asíncrona para buscar emprendedores filtrando por comuna y/o por rubro
   async buscar(comuna?: string, rubro?: string) {
-    // Evalúa si no se ha recibido ni el parámetro comuna ni el parámetro rubro como filtro
+    // Verifica si no se proporcionó ningún filtro de búsqueda (ni comuna ni rubro)
     if (!comuna && !rubro) {
-        // En caso de que no existan filtros de búsqueda, retorna la lista completa usando findAll()
+        // Al no haber filtros especificados, devuelve la lista con todos los emprendedores
         return this.findAll();
-    // Cierre del bloque condicional
+    // Cierre de la condición sin filtros
     }
-    // Inicializa una instancia de QueryBuilder sobre la entidad Emprendedor asignando el alias 'e'
+    // Inicia un constructor de consultas (QueryBuilder) para armar una búsqueda personalizada con el alias 'e'
     const qb = this.repo.createQueryBuilder('e')
-    // Si se especificó el parámetro comuna, agrega una condición SQL AND WHERE parametrizada por comuna
+    // Si se especificó una comuna, añade un filtro para que solo traiga emprendedores de esa comuna
     if (comuna) qb.andWhere('e.comuna = :comuna', { comuna })
-    // Si se especificó el parámetro rubro, agrega una condición SQL AND WHERE parametrizada por rubro
+    // Si se especificó un rubro, añade un filtro para que solo traiga emprendedores de ese rubro
     if (rubro) qb.andWhere('e.rubro = :rubro', { rubro })
-    // Ejecuta la consulta construida y retorna la lista de emprendedores que coinciden con los filtros aplicados
+    // Ejecuta la consulta en la base de datos y devuelve todos los emprendedores que cumplieron las condiciones
     return qb.getMany()
-  // Cierre del método buscar
+  // Cierre de la función buscar
   }
-// Cierre del bloque de la clase EmprendedoresService
+// Cierre de la clase EmprendedoresService
 }

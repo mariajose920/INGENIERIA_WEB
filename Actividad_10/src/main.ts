@@ -1,49 +1,51 @@
-// Importa ValidationPipe desde el paquete '@nestjs/common' para realizar la validación y transformación de datos en las solicitudes
+// Importa la herramienta de validación (ValidationPipe) para comprobar que los datos que envían los usuarios sean válidos y seguros
 import { ValidationPipe } from '@nestjs/common';
-// Importa NestFactory desde '@nestjs/core' para crear y gestionar la instancia de la aplicación NestJS
+// Importa el motor de creación (NestFactory) para construir y poner en funcionamiento la aplicación NestJS
 import { NestFactory } from '@nestjs/core';
-// Importa DocumentBuilder y SwaggerModule desde '@nestjs/swagger' para configurar y generar la documentación Swagger de la API
+// Importa las herramientas de Swagger para generar automáticamente un manual interactivo donde consultar y probar la API
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-// Importa AppModule, el módulo raíz que organiza la estructura y dependencias de la aplicación
+// Importa AppModule, que es el módulo central que organiza todas las partes y funciones de nuestra aplicación
 import { AppModule } from './app.module';
 
-// Función asíncrona principal encargada de inicializar y arrancar la aplicación
+// Define la función principal de inicio encargada de preparar y encender todo el sistema paso a paso
 async function bootstrap() {
-  // Crea la instancia de la aplicación NestJS utilizando AppModule y habilita CORS para permitir peticiones desde otros orígenes
+  // Crea la aplicación usando el módulo central y habilita los permisos CORS para permitir que la web frontend se conecte sin problemas
   const app = await NestFactory.create(AppModule, { cors: true });
   
-  // Configura un pipe de validación global para validar y transformar los datos de entrada en todos los endpoints
+  // Activa un revisor de seguridad general en toda la aplicación para examinar cada dato que ingrese
   app.useGlobalPipes(new ValidationPipe({
-    // Elimina automáticamente cualquier propiedad recibida en la petición que no esté definida en el DTO
+    // Elimina de forma automática cualquier campo o dato desconocido que el usuario intente enviar
     whitelist: true,
-    // Transforma automáticamente los datos entrantes a los tipos especificados en las clases DTO
+    // Transforma automáticamente los datos entrantes a su tipo correcto (como convertir texto a número)
     transform: true,
-    // Lanza un error si el cliente envía propiedades no permitidas que no estén en la lista blanca
+    // Rechaza la petición y devuelve un mensaje de error si se envían datos que no están permitidos
     forbidNonWhitelisted: true
+  // Cierra la configuración y opciones del filtro de validación
   }));
 
-  // Inicializa la configuración de OpenAPI/Swagger mediante DocumentBuilder
+  // Comienza a preparar la configuración para el manual interactivo de la API con Swagger
   const config = new DocumentBuilder()
-    // Establece el título representativo de la API en la documentación Swagger
+    // Asigna el título principal que se mostrará en el encabezado del manual interactivo
     .setTitle('API Emprendedores Ñuble')
-    // Establece una descripción informativa sobre el propósito y compatibilidad de la API
+    // Añade una breve descripción que explica que esta API permite crear, leer, actualizar, borrar y buscar datos para el frontend Vue
     .setDescription('CRUD + búsqueda compatible con frontend Vue')
-    // Asigna la versión de la API que se mostrará en Swagger
+    // Define el número de versión actual que tendrá la documentación de la API
     .setVersion('1.0')
-    // Construye y finaliza el objeto con toda la configuración definida para Swagger
+    // Finaliza y construye el paquete con toda la configuración definida para el manual
     .build();
     
-  // Genera el documento de especificación OpenAPI asociando la aplicación con la configuración creada
+  // Genera el documento completo de la documentación uniendo la configuración creada con la aplicación
   const doc = SwaggerModule.createDocument(app, config);
-  // Configura la interfaz interactiva de Swagger UI asociándola a la ruta '/api'
+  // Publica la página web del manual interactivo asociándola a la ruta '/api' para verla en el navegador
   SwaggerModule.setup('/api', app, doc);
   
-  // Inicia el servidor HTTP escuchando las peticiones en el puerto 3000 de forma asíncrona
+  // Pone a funcionar el servidor esperando peticiones en el puerto 3000 de la computadora
   await app.listen(3000);
-  // Muestra un mensaje en la consola indicando la dirección URL local de la API
+  // Imprime un mensaje en la terminal avisando que la API está lista y en qué enlace encontrarla
   console.log('API en http://localhost:3000');
-  // Muestra un mensaje en la consola indicando la dirección URL donde consultar la documentación Swagger
+  // Imprime un mensaje en la terminal indicando el enlace exacto para abrir y explorar el manual interactivo Swagger
   console.log('Swagger en http://localhost:3000/api');
+// Cierra el bloque de instrucciones de la función principal de arranque
 }
-// Invoca la función bootstrap para poner en marcha la ejecución del servidor
+// Ejecuta la función bootstrap para poner en marcha el servidor inmediatamente
 bootstrap();

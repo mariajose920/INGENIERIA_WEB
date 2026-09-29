@@ -1,50 +1,94 @@
+<!-- Etiqueta de inicio de la plantilla visual: define la interfaz y todos los elementos que el usuario verá en pantalla -->
 <template>
+  <!-- Formulario de contacto: el modificador @submit.prevent evita que el navegador recargue la página y ejecuta la función 'validarFormulario' -->
   <form @submit.prevent="validarFormulario">
+    <!-- Campo de entrada de texto: la directiva v-model lo vincula en tiempo real con la variable reactiva 'nombre' y placeholder muestra el texto de ayuda 'Nombre' -->
     <input v-model="nombre" placeholder="Nombre" />
+    <!-- Campo de entrada de texto: la directiva v-model lo vincula en tiempo real con la variable reactiva 'correo' y placeholder muestra 'Correo' -->
     <input v-model="correo" placeholder="Correo" />
+    <!-- Campo de entrada de texto: la directiva v-model lo vincula en tiempo real con la variable reactiva 'telefono' y placeholder muestra 'Teléfono' -->
     <input v-model="telefono" placeholder="Teléfono" />
+    <!-- Área de texto multilínea: la directiva v-model la conecta con la variable 'mensaje' para redactar consultas extensas y placeholder muestra 'Mensaje' -->
     <textarea v-model="mensaje" placeholder="Mensaje"></textarea>
+    <!-- Etiqueta interactiva que agrupa la casilla de verificación: vinculada mediante v-model a 'newsletter' para permitir al usuario suscribirse al boletín informativo -->
     <label><input type="checkbox" v-model="newsletter" /> Suscribirse al boletín</label>
+    <!-- Botón de acción con el texto 'Enviar': al hacer clic sobre él dispara el evento de envío del formulario -->
     <button type="submit">Enviar</button>
+  <!-- Cierre de la etiqueta del formulario de contacto -->
   </form>
 
 
+  <!-- Contenedor condicional para mostrar errores: v-if hace que sólo aparezca en pantalla si la variable 'error' contiene un mensaje, mostrándolo en texto de color rojo -->
   <div v-if="error" style="color:red">{{ error }}</div>
 
+  <!-- Contenedor condicional de confirmación: v-if hace que sea visible únicamente después de que el formulario haya sido enviado exitosamente ('enviado' sea verdadero) -->
   <div v-if="enviado">
+    <!-- Encabezado de nivel 3 que titula la sección del resumen de los datos enviados -->
     <h3>Datos enviados:</h3>
+    <!-- Párrafo que muestra el texto 'Nombre:' en negrita seguido del valor almacenado en la variable reactiva 'nombre' -->
     <p><strong>Nombre:</strong> {{ nombre }}</p>
+    <!-- Párrafo que muestra el texto 'Correo:' en negrita seguido del valor almacenado en la variable reactiva 'correo' -->
     <p><strong>Correo:</strong> {{ correo }}</p>
+    <!-- Párrafo que muestra el texto 'Teléfono:' en negrita seguido del valor almacenado en la variable reactiva 'telefono' -->
     <p><strong>Teléfono:</strong> {{ telefono }}</p>
+    <!-- Párrafo que muestra el texto 'Mensaje:' en negrita seguido del texto redactado en la variable reactiva 'mensaje' -->
     <p><strong>Mensaje:</strong> {{ mensaje }}</p>
+    <!-- Párrafo que muestra el texto 'Boletín:' en negrita y utiliza un operador condicional para mostrar 'Sí' si newsletter es verdadero o 'No' si es falso -->
     <p><strong>Boletín:</strong> {{ newsletter ? 'Sí' : 'No' }}</p>
+  <!-- Cierre del contenedor condicional de confirmación de datos enviados -->
   </div>
+<!-- Cierre de la plantilla visual del componente -->
 </template>
 
+<!-- Etiqueta de inicio de la sección de lógica y programación del componente escrita en JavaScript -->
 <script>
+// Exporta la configuración y lógica del componente para que pueda ser utilizado en cualquier parte de la aplicación
 export default {
+  // Función 'data' de Vue que declara y administra el estado interno reactivo con las variables del formulario
   data() {
+    // Retorna el objeto con todos los valores y variables iniciales del componente
     return {
+      // Variable de tipo texto inicialmente vacía que almacena el nombre del usuario
       nombre: '',
+      // Variable de tipo texto inicialmente vacía que guarda el correo electrónico ingresado
       correo: '',
+      // Variable de tipo texto inicialmente vacía que almacena el número de teléfono
       telefono: '',
+      // Variable de tipo texto inicialmente vacía que guarda el cuerpo del mensaje o consulta
       mensaje: '',
+      // Variable booleana (verdadero/falso) inicializada en false que indica si el usuario marcó la casilla del boletín
       newsletter: false,
+      // Variable booleana inicializada en false que registra si el formulario ya fue enviado satisfactoriamente
       enviado: false,
+      // Variable de tipo texto inicialmente vacía que almacena el mensaje de error cuando falla la validación
       error: ''
+    // Cierre del objeto que contiene las variables de datos
     }
+  // Cierre de la función de datos reactivos data()
   },
+  // Bloque 'methods' donde se definen las funciones o acciones que este componente puede realizar
   methods: {
+    // Función encargada de validar que los campos del formulario contengan información antes de enviarlo
     validarFormulario() {
+      // Condicional: verifica si alguno de los cuatro campos principales (nombre, correo, teléfono o mensaje) se encuentra vacío
       if (!this.nombre || !this.correo || !this.telefono || !this.mensaje) {
+        // Asigna el texto de error indicando que todos los campos del formulario son obligatorios
         this.error = 'Todos los campos son obligatorios';
+        // Detiene inmediatamente la ejecución de la función para evitar que el formulario se envíe sin los datos completos
         return;
+      // Cierre del bloque condicional if de validación
       }
+      // Cambia el estado de 'enviado' a verdadero para hacer visible el bloque con los datos ingresados
       this.enviado = true;
+      // Restablece y vacía la variable de error para que no se muestre ninguna advertencia en pantalla
       this.error = '';
+    // Cierre de la función validarFormulario
     }
+  // Cierre del bloque de métodos
   }
+// Cierre del objeto principal de configuración del componente
 }
+// Cierre de la etiqueta de script de JavaScript
 </script>
 
 

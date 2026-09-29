@@ -1,39 +1,39 @@
-// Importa NestFactory del núcleo de NestJS para inicializar el contexto de la aplicación
+// Importa la herramienta NestFactory de NestJS para inicializar la aplicación en segundo plano
 import { NestFactory } from '@nestjs/core'
-// Importa el módulo principal AppModule que contiene las configuraciones y dependencias del sistema
+// Importa el módulo principal AppModule que contiene todas las configuraciones del sistema
 import { AppModule } from './app.module'
-// Importa DataSource de TypeORM para gestionar la conexión y operaciones de base de datos
+// Importa la herramienta DataSource que gestiona la conexión con la base de datos
 import { DataSource } from 'typeorm'
-// Importa la entidad Emprendedor que modela la tabla correspondiente en la base de datos
+// Importa el molde o modelo Emprendedor que define cómo se guardan los datos en la tabla
 import { Emprendedor } from './emprendedores/entities/emprendedor.entity'
 
-// Función asíncrona principal encargada de ejecutar el sembrado (seeding) de datos
+// Define una función principal que se encargará de cargar los datos de prueba iniciales en el sistema
 async function bootstrap() {
-  // Crea el contexto de ejecución de NestJS a partir de AppModule sin iniciar un servidor HTTP
+  // Enciende la aplicación en segundo plano sin levantar un servidor web, usando la configuración principal
   const app = await NestFactory.createApplicationContext(AppModule)
-  // Obtiene la instancia del DataSource de TypeORM desde el contenedor de inyección de dependencias
+  // Obtiene la conexión activa con la base de datos para poder realizar operaciones en ella
   const ds = app.get(DataSource)
-  // Obtiene el repositorio correspondiente a la entidad Emprendedor para realizar operaciones de base de datos
+  // Obtiene el administrador (repositorio) encargado de guardar y consultar los registros de emprendedores
   const repo = ds.getRepository(Emprendedor)
 
-  // Define un arreglo con la lista de objetos de emprendedores que se usarán como datos de prueba iniciales
+  // Crea una lista con datos de prueba de diferentes emprendimientos locales
   const base = [
-    // Define el primer registro de ejemplo con información de 'Catedral Gifts'
+    // Datos del primer emprendimiento de artesanías en Chillán con su información de contacto
     { nombre: 'Catedral Gifts', comuna: 'Chillán', rubro: 'Artesanía', descripcion: 'Souvenirs inspirados en la catedral.', contacto: 'catedral@negocio.cl' },
-    // Define el segundo registro de ejemplo con información de 'Miel Las Trancas'
+    // Datos del segundo emprendimiento de apicultura en Pinto con su número telefónico
     { nombre: 'Miel Las Trancas', comuna: 'Pinto', rubro: 'Apicultura', descripcion: 'Miel de montaña 100% natural.', contacto: '+56 9 1234 5678' },
-    // Define el tercer registro de ejemplo con información de 'Quesos San Carlos'
+    // Datos del tercer emprendimiento de lácteos artesanales en San Carlos con su correo
     { nombre: 'Quesos San Carlos', comuna: 'San Carlos', rubro: 'Lácteos', descripcion: 'Quesos artesanales madurados.', contacto: 'ventas@quesossancarlos.cl' }
-    // Cierra la definición del arreglo de datos iniciales
+    // Cierra la lista que agrupa a los emprendedores de ejemplo
   ]
 
-  // Inserta y persiste en la base de datos la lista de emprendedores definida
+  // Guarda y almacena en la base de datos todos los emprendedores definidos en la lista anterior
   await repo.save(base)
-  // Muestra un mensaje en consola confirmando la inserción de los registros
+  // Muestra un mensaje en la consola avisando al usuario que los datos fueron insertados con éxito
   console.log('Datos de ejemplo insertados')
-  // Cierra el contexto de la aplicación NestJS finalizando conexiones activas
+  // Cierra de forma ordenada la aplicación y finaliza las conexiones abiertas
   await app.close()
-// Cierra el bloque de la función bootstrap
+// Cierra el bloque de código de la función bootstrap
 }
-// Ejecuta la función bootstrap para iniciar el proceso de siembra de datos
+// Llama y ejecuta la función bootstrap para iniciar todo el proceso de carga de datos
 bootstrap()
