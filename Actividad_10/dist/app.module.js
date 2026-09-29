@@ -22,7 +22,7 @@ exports.AppModule = AppModule = __decorate([
                 type: 'better-sqlite3',
                 database: 'data.db',
                 entities: [emprendedor_entity_1.Emprendedor],
-                synchronize: true
+                synchronize: true,
             }),
             emprendedores_module_1.EmprendedoresModule
         ],
