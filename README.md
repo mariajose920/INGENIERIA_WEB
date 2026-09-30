@@ -1,34 +1,50 @@
-# Repositorio Consolidado: Ingeniería Web
+﻿# Repositorio Consolidado: Ingeniería Web
 
-Este repositorio es una consolidación del historial completo y los proyectos realizados a lo largo del curso. Todas las actividades están unificadas en la misma línea de tiempo de Git, manteniendo su historial de commits original de principio a fin, organizadas en carpetas temáticas correspondientes al paso a paso que solicitaste.
+Este repositorio es una consolidación de los proyectos y prácticas realizadas a lo largo del curso. Las actividades están organizadas de principio a fin, manteniendo su progresión y evolución. A continuación se detalla el enfoque de cada actividad.
 
-## 📂 Estructura del repositorio
+## 🚀 Detalle de Actividades
 
-### `Actividades_1_a_3/` (Antes: PROYECTOWEB1)
-- Contiene los inicios del proyecto utilizando componentes en Vue (Padre e Hijo), validaciones de los primeros formularios e interacción básica usando `emits` y propiedades.
+### Actividad 1
+- Inicios del proyecto utilizando componentes en Vue (Padre e Hijo).
 
-### `Actividades_4_a_6/` (Antes: PROYECTOWEB2)
-- Desarrollo y aplicación de hojas de estilos (`style.css`).
-- Formularios interactivos más complejos con validación.
-- Implementación de estado global (store) para la recepción y manejo de inventario básico (Libros, Totales, Recepciones).
-- Exploración profunda del renderizado dinámico mediante listas y el manejo del estado reactivo global.
+### Actividad 2
+- Configuración inicial, validaciones y ajustes de la guía base.
 
-### `Actividad_7_8_9/` (Antes: PROYECTOWEB3)
-- **Actividades 7 y 8**: Desarrollo progresivo del Frontend moderno y visual. Integración de Layouts, Navbar, Footer, componentes (SPA con Router), adaptándose al giro del negocio de "Servicios Tecnológicos".
-- **Actividad 9**: Se incorporó el **Backend** inicial (subcarpeta `/backend`) con el primer servidor Express, el archivo de datos local (`servicios.js`) y la lógica de endpoints GET y filtros para conectar con el frontend.
+### Actividad 3
+- Interacción básica usando emits y el paso de datos mediante propiedades (props).
 
-### `Actividad_10/` (Migración Backend con NestJS)
-- Refactorización de la API original (hecha en Express) hacia la arquitectura robusta de **NestJS**.
-- Integración de persistencia de base de datos con **TypeORM** y **SQLite** (`better-sqlite3`).
-- Creación de DTOs con validadores estrictos y Pipes globales.
-- Documentación automatizada de los endpoints (CRUD completo) gracias a **Swagger**.
-- Semillas automáticas (`seed.ts`) para poblar la DB con los emprendedores locales.
+### Actividad 4
+- Creación de formularios interactivos con validación.
 
-### `Actividad_11/` (Feria Artesanal de Ñuble - Vue 3)
-- Construcción integral del catálogo "Mercadito Artesanal de Ñuble" (Front).
-- Integración de todas las directivas aprendidas (`v-if`, `v-else`, `v-show`, `v-for`, `v-model`) aplicadas sobre tarjetas de productos.
-- Propiedades computadas (`computed`) para los filtros y las búsquedas en tiempo real.
-- Ventana Modal emergente reutilizable para el detalle del producto, y eventos combinados.
+### Actividad 5
+- Desarrollo y aplicación de hojas de estilos. Renderizado dinámico mediante listas (v-for) y condicionales (v-if).
+
+### Actividad 6
+- Implementación de estado global (store) para la recepción y manejo de inventario.
+
+### Actividad 7
+- Refinamiento de la arquitectura frontend, estructurando componentes base y corrigiendo el estado compartido.
+
+### Actividad 8
+- Desarrollo de un Frontend moderno (SPA). Integración de Layouts, Navbar, Footer y vistas, adaptándose al giro del negocio de "Servicios Tecnológicos", incluyendo formulario de contacto y filtros interactivos.
+
+### Actividad 9
+- Se incorporó el **Backend** inicial con un servidor Express, archivo de datos local y lógica de endpoints GET para conectar con el frontend.
+
+### Actividad 10
+- Refactorización de la API original hacia la arquitectura de **NestJS**.
+- Integración de base de datos con **TypeORM** y **SQLite**. Creación de DTOs con validadores estrictos y Pipes globales.
+- Documentación automatizada de los endpoints (CRUD) gracias a **Swagger** y semillado de datos automáticos.
+
+### Actividad 11
+- Construcción integral del catálogo "Feria Artesanal de Ñuble".
+- Integración de directivas (v-if, v-else, v-show, v-for, v-model) aplicadas sobre tarjetas de productos.
+- Propiedades computadas (computed) para filtros/búsquedas en tiempo real y ventana modal emergente.
+
+### Actividad 12
+- Evolución del catálogo hacia una Single Page Application (SPA) usando **Vue Router**.
+- Implementación de navegación sin recargar (Inicio, Catálogo, Detalle, Favoritos, Contacto, Error 404).
+- Persistencia de favoritos localmente en el navegador mediante localStorage.
 
 ---
-*Cada carpeta posee sus propios archivos y configuración (`package.json`, etc.). Todo el historial de commits desde la primera actividad ("Initial commit", "componentes Padre e Hijo") hasta la Actividad 11 se ha integrado exitosamente en el `git log` de este único repositorio raíz.*
+*Cada rama de este repositorio corresponde al avance progresivo del curso, permitiendo visualizar la evolución del proyecto de manera individual. Todo el historial consolidado está registrado de forma secuencial.*
