@@ -1,5 +1,39 @@
-# Vue 3 + Vite
+# Gestión de Servicios Tecnológicos (IW600 · Actividad 13)
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+**Estudiante:** María José Vilches Aranguiz
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Objetivo
+CRUD de servicios tecnológicos con Vue 3, Vue Router, Fetch y una API REST local (JSON Server).
+
+## Requisitos
+Node.js, npm, Git y un navegador.
+
+## Instalación
+```bash
+npm install
+```
+
+## Ejecución (dos terminales)
+```bash
+# Terminal 1: API REST en http://localhost:3001/servicios
+npm run api
+
+# Terminal 2: aplicación en http://localhost:5173
+npm run dev
+```
+
+## Funcionalidades
+- Listado desde la API, con búsqueda por nombre y filtro por categoría.
+- Total de servicios filtrados.
+- Crear y editar con validación; botón Guardar bloqueado mientras se envía.
+- Eliminar con confirmación; mensajes de éxito y error.
+- Diseño adaptable a pantallas pequeñas.
+
+## Solicitudes HTTP
+- GET `/servicios` y `/servicios/:id`: consultar.
+- POST `/servicios`: crear.
+- PUT `/servicios/:id`: actualizar.
+- DELETE `/servicios/:id`: eliminar.
+
+## Capturas
+Agregar aquí capturas de listado, creación, edición y eliminación.
