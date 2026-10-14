@@ -41,7 +41,15 @@ const filtrados = computed(() => {
 const totalPaginas = computed(() => Math.max(1, Math.ceil(filtrados.value.length / porPagina)))
 const visibles = computed(() => filtrados.value.slice((pagina.value - 1) * porPagina, pagina.value * porPagina))
 
+const precioTotal = computed(() => filtrados.value.reduce((suma, s) => suma + Number(s.precio), 0))
+
 watch([buscando, categoria, orden], () => { pagina.value = 1 })
+
+function limpiarFiltros() {
+  buscando.value = ''
+  categoria.value = 'Todas'
+  orden.value = 'nombre-asc'
+}
 
 async function borrar(servicio) {
   if (!confirm(`¿Eliminar ${servicio.nombre}?`)) return
@@ -69,20 +77,21 @@ async function borrar(servicio) {
         <option value="precio-asc">Precio menor a mayor</option>
         <option value="precio-desc">Precio mayor a menor</option>
       </select>
+      <button type="button" @click="limpiarFiltros">Limpiar filtros</button>
     </div>
     <p v-if="cargando">Cargando servicios...</p>
     <p v-if="error" role="alert" class="error">{{ error }}</p>
     <p v-if="mensaje" role="status">{{ mensaje }}</p>
     <template v-if="!cargando && !error">
-      <p>{{ filtrados.length }} servicio(s) encontrado(s)</p>
+      <p>{{ filtrados.length }} servicio(s) encontrado(s) · Precio total: ${{ precioTotal.toLocaleString('es-CL') }}</p>
       <p v-if="filtrados.length === 0">No hay resultados para los filtros seleccionados.</p>
       <table v-else>
         <thead><tr><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Acciones</th></tr></thead>
         <tbody>
           <tr v-for="s in visibles" :key="s.id">
-            <td>{{ s.nombre }}</td><td>{{ s.categoria }}</td>
-            <td>${{ Number(s.precio).toLocaleString('es-CL') }}</td>
-            <td>
+            <td data-label="Nombre">{{ s.nombre }}</td><td data-label="Categoría">{{ s.categoria }}</td>
+            <td data-label="Precio">${{ Number(s.precio).toLocaleString('es-CL') }}</td>
+            <td data-label="Acciones">
               <RouterLink :to="`/servicios/${s.id}/editar`">Editar</RouterLink>
               <button @click="borrar(s)">Eliminar</button>
             </td>
