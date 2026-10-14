@@ -1,0 +1,10 @@
+{
+  "servicios": [
+    { "id": "1", "nombre": "Soporte técnico", "categoria": "Soporte", "precio": 25000, "descripcion": "Diagnóstico y reparación de equipos." },
+    { "id": "2", "nombre": "Diseño web", "categoria": "Desarrollo", "precio": 180000, "descripcion": "Sitio corporativo adaptable." },
+    { "id": "3", "nombre": "Redes Wi-Fi", "categoria": "Redes", "precio": 85000, "descripcion": "Instalación y configuración de red." },
+    { "id": "4", "nombre": "Respaldo de datos", "categoria": "Soporte", "precio": 45000, "descripcion": "Respaldo local y en la nube." },
+    { "id": "5", "nombre": "API empresarial", "categoria": "Desarrollo", "precio": 230000, "descripcion": "Construcción de API REST." },
+    { "id": "6", "nombre": "Auditoría de red", "categoria": "Redes", "precio": 120000, "descripcion": "Revisión de conectividad y seguridad." }
+  ]
+}
